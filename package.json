@@ -44,6 +44,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/example/dsh-plugin-security-review.git"
+    "url": "git+https://github.com/ateen18/dsh-plugin-security-review.git"
   }
 }

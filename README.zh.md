@@ -47,10 +47,10 @@ dsh-safe-plugin add dsh-plugin-security-review
 
 ```sh
 # 从 GitHub 仓库安装（本包无构建步骤）
-dsh plugin --profile web add github:你的用户名/dsh-plugin-security-review
+dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 
 # 或从发布产物 tarball 安装
-dsh plugin --profile web add https://example.com/dsh-plugin-security-review-0.1.0.tgz
+dsh plugin --profile web add https://github.com/ateen18/dsh-plugin-security-review/releases/download/v0.1.0/dsh-plugin-security-review-0.1.0.tgz
 
 # 或直接把仓库 clone/link 进 profile（开发联调用）
 dsh plugin --profile web add link:D:/Coding/安全审查插件
