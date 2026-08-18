@@ -1,0 +1,9 @@
+{
+  "name": "benign-plugin",
+  "version": "0.2.0",
+  "description": "test fixture: a clean plugin",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "someone",
+  "repository": { "type": "git", "url": "https://example.com/benign.git" }
+}

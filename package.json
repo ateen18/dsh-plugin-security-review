@@ -1,0 +1,49 @@
+{
+  "name": "dsh-plugin-security-review",
+  "description": "DSH plugin security review gate: pre-review plugin source before install, audit the running plugin roster at boot, and produce verdict reports with install recommendations",
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./analyzer": "./lib/analyzer/index.js",
+    "./cli": "./lib/cli/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "dsh-safe-plugin": "./lib/cli/index.js"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "README.zh.md"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "^1.0.2",
+    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "security",
+    "audit",
+    "supply-chain"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/dsh-plugin-security-review.git"
+  }
+}

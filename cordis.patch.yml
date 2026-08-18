@@ -1,0 +1,13 @@
+# dsh-plugin-security-review bundle patch: inserts the review gate row into
+# the profile plugin roster. Install the package into a dsh profile and it
+# joins the layer stack automatically:
+#
+#   dsh-safe-plugin add dsh-plugin-security-review     (reviewed install)
+#   dsh plugin --profile web add dsh-plugin-security-review
+#
+# The single row mounts the host half only (import gate, boot audit, agent
+# tools, settings section). The companion CLI `dsh-safe-plugin` performs the
+# deterministic pre-install review.
+- insert:
+    - id: security-review
+      name: 'dsh-plugin-security-review'

