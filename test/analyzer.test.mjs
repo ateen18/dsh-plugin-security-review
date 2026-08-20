@@ -56,9 +56,14 @@ test("verdict policy modes", () => {
 
 test("scoreFindings", () => {
   assert.equal(scoreFindings([]), 100);
-  assert.equal(scoreFindings([{ severity: "critical" }]), 45);
-  assert.equal(scoreFindings([{ severity: "high" }]), 82);
-  assert.ok(scoreFindings([{ severity: "critical" }, { severity: "critical" }, { severity: "critical" }]) < 40);
+  assert.equal(scoreFindings([{ id: "r1", severity: "critical" }]), 45);
+  assert.equal(scoreFindings([{ id: "r1", severity: "high" }]), 82);
+  // 同一规则重复触发不线性叠加：按规则 ID 去重，只扣一次（外加蔓延惩罚）
+  assert.equal(scoreFindings([{ id: "r1", severity: "critical" }, { id: "r1", severity: "critical" }, { id: "r1", severity: "critical" }]), 45);
+  // 不同规则各自扣分
+  assert.ok(scoreFindings([{ id: "r1", severity: "critical" }, { id: "r2", severity: "critical" }, { id: "r3", severity: "critical" }]) < 40);
+  // 同规则大量蔓延（>=11 处）才有小幅额外扣分
+  assert.ok(scoreFindings(Array.from({ length: 11 }, () => ({ id: "r1", severity: "critical" }))) < 45);
 });
 
 test("semver basics", () => {

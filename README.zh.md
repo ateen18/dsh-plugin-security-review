@@ -91,8 +91,9 @@ dsh-safe-plugin verify
 | 字段 | 默认 | 说明 |
 | --- | --- | --- |
 | `policy` | `standard` | `standard`：critical→block；`strict`：high 也 block；`audit-only`：只记录不拦截 |
-| `autoDisable` | `true` | 运行期审计发现 block 时自动禁用该插件 |
-| `autoPatchProfile` | `true` | 把被拦截插件写进 profile `cordis.patch.yml` 托管块，下次启动不再加载其代码 |
+| `autoDisable` | `false` | **默认只报告不自动禁用**（稳定性优先：防止误伤合法插件或在运行中卸载服务导致 dsh 崩溃）；显式开启后，审计发现 block 才会禁用该插件 |
+| `autoPatchProfile` | `false` | 默认不写 profile `cordis.patch.yml` 托管块；显式开启后，被拦截插件下次启动不再加载其代码 |
+| `installGate` | `false` | **方案 B 改良版**：开启后只在缺失/失效时注入（不反复重写）、原子写入 + node --check 语法自检（失败即回滚）、插件不可用时自清理、另有 `dsh-safe-plugin install-gate/uninstall-gate` 手动管理。默认关闭，安装预审推荐 `dsh-safe-plugin add` |
 | `allowlist` | `[]` | 豁免名单（包名，`*` 表示全部豁免） |
 
 ## 审查规则（节选，见 docs/design.md 与 lib/analyzer/rules.js）

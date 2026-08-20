@@ -61,6 +61,23 @@ dsh 插件与普通 npm 包不同：它在**宿主进程**内以完整权限运�
 - `reports/latest/<包名>.md`、`reports/history/*.json`、`index.json`。
 - profile `cordis.patch.yml` 托管块（MARKER 注释包裹，自动增删行）。
 
+
+## 6. 稳定性加固（2026-08-18 审查后）
+
+针对「插件导致 dsh 崩溃/无法启动」的排查与修复：
+
+1. **install-gate 采用方案 B（改良版，默认关闭）**：原实现在每次启动时改写全局 dsh 安装目录的 `lib/bin.js`，存在 dsh 升级、目录只读、结构变化、卸载残留等风险。改良版：
+   - **低频注入**：已注入且 import 路径仍指向当前模块时，启动不再写盘（无反复重写）；仅在缺失（dsh 升级覆盖）或失效（插件移动/重装）时重注入。
+   - **原子写入 + 语法自检**：先写临时文件，用 `node --check`（ESM）校验通过后才 rename 覆盖；任何失败保留原文件（fail-open）。
+   - **自清理**：注入块内嵌自清理逻辑——插件被卸载/移动导致 import 失败时，hook 自动从 bin.js 剥离自身，不残留。
+   - **手动管理**：`dsh-safe-plugin install-gate|uninstall-gate [--dsh-root <dir>]`。
+   - 默认关闭；安装期预审推荐 `dsh-safe-plugin add`（不改任何 dsh 文件）。
+2. **审计默认只报告**：`autoDisable` 与 `autoPatchProfile` 默认均为 `false`。运行中 `loader.update(..., {disabled:true})` 会卸载已加载插件及其服务，可能导致依赖它的插件运行中崩溃或下次启动缺服务失败；写 profile `cordis.patch.yml` 托管块曾因 `[]` 残留破坏 YAML。现默认只记录报告与事件，由用户人工处置。
+3. **import gate 的 block 不再抛错**：改为返回 no-op 插件模块（不执行其代码），保证 HMR 组事务与动态 `loader.create` 永不因本插件失败，杜绝 unhandledRejection 崩溃链。
+4. **apply 顶层兜底 try/catch**：任何内部异常只记录日志，绝不让插件 entry 失败导致 dsh 启动失败（dsh 的 fail-loud 契约下 entry 失败 = 启动失败）。
+5. **install-gate 模块动态加载**：其缺陷不会拖垮插件模块图。
+
+崩溃历史：`ERR_MODULE_NOT_FOUND`（顶层静态导入宿主包 → host.js 惰性解析修复）、`apply.name` 赋值（ESM 严格模式抛错 → Object.defineProperty 修复）、managed patch `[]` 残留破坏 YAML（已修）、install-gate 全局 bin.js 篡改（现默认关闭并自动清理）。
 ## 5. 明确的取舍
 
 - 审查器失败降级为 warn（fail-open）：可用性优先，配合 `verify` 手动复查；被托管块拦住的插件不受此影响（块是持久化的）。
