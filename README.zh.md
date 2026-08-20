@@ -84,7 +84,9 @@ dsh-safe-plugin verify
 
 - 每份报告：安全评分（0-100）、`pass / warn / block / audit` 结论、逐条发现（级别、类别、文件:行、代码片段、建议）、安装建议与推荐命令。
 - 报告持久化在 `$DSH_HOME/security-review/`：`reports/latest/<包名>.md` 为最新 Markdown 报告，`reports/history/` 为 JSON 历史，`index.json` 为索引。
-- Web GUI：设置页新增「security-review」区，可调审查策略（`standard / strict / audit-only`）、自动禁用开关、allowlist。
+- Web GUI：
+  - 设置页左侧栏新增「**插件安全审查**」模块：展示当前全部已加载插件（官方内置插件灰显、无需审查），每个插件带彩色风险圆点（🟢安全 / 🟡有风险 / 🔴危险）与一句话风险提炼；「一键安全审查」按钮对全部插件执行完整静态审查；非官方插件提供「卸载」按钮（走 pnpm remove，重启后完全生效）。
+  - 设置页「security-review」配置区可调审查策略（`standard / strict / audit-only`）、自动禁用开关、allowlist、installGate。
 
 ## 审查策略（settings → security-review）
 

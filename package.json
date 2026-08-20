@@ -11,10 +11,11 @@
     ".": "./lib/index.js",
     "./analyzer": "./lib/analyzer/index.js",
     "./cli": "./lib/cli/index.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./client": "./lib/client.js"
   },
   "bin": {
-    "dsh-safe-plugin": "./lib/cli/index.js"
+    "dsh-safe-plugin": "lib/cli/index.js"
   },
   "files": [
     "lib",
@@ -26,6 +27,13 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "platform": "web"
     }
   },
   "dependencies": {
@@ -42,8 +50,13 @@
     "audit",
     "supply-chain"
   ],
+  "author": "ateen18",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ateen18/dsh-plugin-security-review.git"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/ateen18/dsh-plugin-security-review/issues"
+  },
+  "homepage": "https://github.com/ateen18/dsh-plugin-security-review#readme"
 }
