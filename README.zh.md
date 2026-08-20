@@ -22,39 +22,6 @@ dsh plugin --profile web add dsh-plugin-security-review
 
 安装后，`dsh.plugin` 会自动把本包加入 `dsh.profile.bundles` 层栈（本包声明了 `dsh.bundle`），无需手工改配置。
 
-## 对外发布与安装（供他人使用）
-
-本插件包名为 **`dsh-plugin-security-review`**（版本 `0.1.0`，MIT 协议），附带命令行工具 `dsh-safe-plugin`。
-
-### 方式一：发布到 npm registry（推荐）
-
-```sh
-# 发布者：
-cd D:/Coding/安全审查插件
-npm login
-npm publish          # 发布前请把 package.json 里的 repository 占位地址改成真实仓库
-
-# 使用者：
-npm i -g dsh-plugin-security-review     # 让 dsh-safe-plugin 命令进入 PATH
-dsh plugin --profile web add dsh-plugin-security-review   # 装进 web profile
-# 或走安全安装器（会先自审，通过后转发安装）：
-dsh-safe-plugin add dsh-plugin-security-review
-```
-
-> 说明：`files` 白名单只发布 `lib`、`cordis.patch.yml` 与 README，刻意构造的恶意测试夹具（`test/fixtures`）不会随包发布；依赖为零（peer 均为 optional，运行时由 dsh 安装闭包解析）。
-
-### 方式二：不发布，走 GitHub / tarball / link
-
-```sh
-# 从 GitHub 仓库安装（本包无构建步骤）
-dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
-
-# 或从发布产物 tarball 安装
-dsh plugin --profile web add https://github.com/ateen18/dsh-plugin-security-review/releases/download/v0.1.0/dsh-plugin-security-review-0.1.0.tgz
-
-# 或直接把仓库 clone/link 进 profile（开发联调用）
-dsh plugin --profile web add link:D:/Coding/安全审查插件
-```
 
 ### 卸载
 
