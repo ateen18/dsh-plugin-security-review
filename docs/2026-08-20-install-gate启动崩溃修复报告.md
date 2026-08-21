@@ -25,7 +25,7 @@
 
 ```
 $ node --check lib/index.js
-D:\Coding\安全审查插件\lib\index.js:98
+<插件源码目录>\lib\index.js:98
   const store = new ReviewStore();
         ^
 SyntaxError: Identifier 'store' has already been declared
