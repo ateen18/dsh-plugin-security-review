@@ -72,7 +72,7 @@ dsh-safe-plugin verify                  # re-review installed plugins
 ## Development
 
 ```sh
-node --test test      # analyzer unit tests (no dsh needed; run from this dir)
+npm test      # analyzer unit tests (no dsh needed; run from this dir)
 ```
 
 License: MIT

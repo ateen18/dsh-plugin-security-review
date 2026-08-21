@@ -9,8 +9,9 @@
 | 层 | 时机 | 能力 |
 | --- | --- | --- |
 | 1. 安装预审 | 安装前（`dsh-safe-plugin add`） | 下载源码（**不执行任何安装脚本**），静态分析后给出结论；`block` 直接拒绝安装，`warn` 需人工确认，`pass` 才转发给 `dsh plugin add --ignore-scripts` |
-| 2. 运行期门禁 | dsh 启动后 | 对 profile 中所有外部插件逐一审查（带缓存）；`block` 的插件被 `loader.update(id,{disabled:true})` 禁用，并把 `disabled: true` 写入 profile 的 `cordis.patch.yml` 托管拦截块，**下次启动时其代码根本不会被 import** |
+| 2. 运行期门禁 | dsh 启动后 | 对 profile 中所有外部插件逐一审查（带缓存）；`block` 的插件被 `loader.update(id,{disabled:true})` 禁用，并把 `disabled: true` 写入 profile 的 `cordis.patch.yml` 托管拦截块，**下次启动时其代码根本不会被 import**；可选运行时守卫拦截危险工具调用 |
 | 3. 会话内工具 | 会话进行中 | `security_review` / `security_review_status` 两个工具，可随时审查任意插件/目录并读取历史报告 |
+| 3.5 增强分析 | 审查时 | 反混淆解码（base64/hex/fromCharCode/\\xNN 解码后重扫密钥/命令/URL）+ 词法剥离重扫（消除字符串/注释误报，捕捉动态拼接调用） |
 
 ## 安装本插件
 
@@ -65,6 +66,7 @@ dsh-safe-plugin verify
 | `autoDisable` | `false` | **默认只报告不自动禁用**（稳定性优先：防止误伤合法插件或在运行中卸载服务导致 dsh 崩溃）；显式开启后，审计发现 block 才会禁用该插件 |
 | `autoPatchProfile` | `false` | 默认不写 profile `cordis.patch.yml` 托管块；显式开启后，被拦截插件下次启动不再加载其代码 |
 | `installGate` | `false` | **方案 B 改良版**：开启后只在缺失/失效时注入（不反复重写）、原子写入 + node --check 语法自检（失败即回滚）、插件不可用时自清理、另有 `dsh-safe-plugin install-gate/uninstall-gate` 手动管理。默认关闭，安装预审推荐 `dsh-safe-plugin add` |
+| `runtimeGuard` | `off` | **运行时工具调用守卫**：`off` 不启用；`log` 检测到危险工具调用（破坏性命令/下载执行/SSRF/敏感凭据文件/提示词注入）只记录日志；`block` 直接拒绝危险调用（fail-open，内部异常一律放行） |
 | `allowlist` | `[]` | 豁免名单（包名，`*` 表示全部豁免） |
 
 ## 审查规则（节选，见 docs/design.md 与 lib/analyzer/rules.js）
@@ -119,9 +121,8 @@ node "D:/Coding/安全审查插件/lib/cli/index.js" review ./某个插件目录
 
 # 运行单元测试（不需要 dsh 环境，零依赖；注意不要在 test 后加反斜杠）
 cd D:/Coding/安全审查插件
-node --test test
+npm test
 
 # 对本插件自身做一次自审（排除刻意构造的恶意测试夹具后应为 warn 而非 block）
 node lib/cli/index.js review . --ignore test/fixtures
 ```
-
