@@ -36,12 +36,6 @@
       "platform": "web"
     }
   },
-  "dependencies": {
-    "@deepseek-ai/cordis-plugin-loader": "^1.0.2",
-    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6",
-    "@deepseek-ai/schemastery": "^3.18.1"
-  },
   "keywords": [
     "dsh",
     "deepseek-harness",
@@ -58,5 +52,11 @@
   "bugs": {
     "url": "https://github.com/ateen18/dsh-plugin-security-review/issues"
   },
-  "homepage": "https://github.com/ateen18/dsh-plugin-security-review#readme"
+  "homepage": "https://github.com/ateen18/dsh-plugin-security-review#readme",
+  "optionalDependencies": {
+    "@deepseek-ai/cordis-plugin-loader": "^1.0.2",
+    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  }
 }
