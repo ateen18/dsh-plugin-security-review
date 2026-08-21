@@ -218,13 +218,6 @@ With a `link:` install, host changes take effect after restart; **client-bundle 
 6. The client is a hand-written ModuleLoader bundle, not validated by a bundler — if the settings entry/UI misbehaves, check the browser Console and dsh terminal logs first.
 
 ## 11. Development
-
-```sh
-cd D:/Coding/安全审查插件
-node --test test            # unit tests (analyzer + install-gate + watcher; zero deps)
-node --check lib/index.js   # syntax check (mandatory after edits)
-```
-
 ### Directory layout
 
 ```text
@@ -250,23 +243,6 @@ lib/
     └── render.js     Markdown report rendering
 docs/                design docs, user guide and fix/optimization records
 test/               node --test tests plus evil/benign fixtures
-```
-
-### Related documents
-
-- `docs/design.md` — architecture and threat model
-- `docs/使用说明.md` — Chinese user guide (this document's Chinese counterpart)
-- `docs/2026-08-18-启动崩溃问题修复报告.md` / `docs/2026-08-20-install-gate启动崩溃修复报告.md` — crash-fix records
-- `docs/2026-08-20-web-ui-优化记录.md` — Web UI module development and issue log
-- `docs/2026-08-20-跨机安装崩溃排查与加固报告.md` — cross-machine install investigation and hardening
-
-## 12. Publishing and Installing for Others
-
-```sh
-# Publisher:
-cd D:/Coding/安全审查插件
-npm login && npm publish
-
 # Users:
 npm i -g dsh-plugin-security-review
 dsh plugin --profile web add dsh-plugin-security-review
