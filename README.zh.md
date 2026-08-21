@@ -108,19 +108,19 @@ test/                 node --test 单元测试与恶意/良性夹具
 
 ```sh
 # 先把本仓库链接进 profile（link: 不需要发布到 registry）
-dsh plugin --profile web add link:D:/Coding/安全审查插件
+dsh plugin --profile web add link:<你的插件源码目录>
 
 # CLI 的三种调用方式（任选其一）：
 # 1) 全局安装（把 bin 放进 PATH，之后可直接用 dsh-safe-plugin）
-npm i -g D:/Coding/安全审查插件
+npm i -g <你的插件源码目录>
 # 2) 用 profile 内生成的 bin（pnpm 会自动为带 bin 的依赖建 shim）
 & "$env:USERPROFILE.dshprofilesweb
 ode_modules.bindsh-safe-plugin.cmd" --help
 # 3) 直接以 node 运行
-node "D:/Coding/安全审查插件/lib/cli/index.js" review ./某个插件目录
+node "<你的插件源码目录>/lib/cli/index.js" review ./某个插件目录
 
 # 运行单元测试（不需要 dsh 环境，零依赖；注意不要在 test 后加反斜杠）
-cd D:/Coding/安全审查插件
+cd <你的插件源码目录>
 npm test
 
 # 对本插件自身做一次自审（排除刻意构造的恶意测试夹具后应为 warn 而非 block）

@@ -27,7 +27,7 @@ dsh plugin --profile web add dsh-plugin-security-review
 dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 
 # Option 3: local development (link: — changes take effect immediately)
-dsh plugin --profile web add link:D:/Coding/安全审查插件
+dsh plugin --profile web add link:<your-plugin-source-dir>
 
 # Option 4: safe installer (self-review first; requires the CLI, see 2.2)
 dsh-safe-plugin add dsh-plugin-security-review
@@ -45,7 +45,7 @@ npm i -g dsh-plugin-security-review
 & "$env:USERPROFILE\.dsh\profiles\web\node_modules\.bin\dsh-safe-plugin.cmd" --help
 
 # ③ Run with node directly
-node "D:/Coding/安全审查插件/lib/cli/index.js" --help
+node "<your-plugin-source-dir>/lib/cli/index.js" --help
 ```
 
 ### 2.3 Uninstall this plugin
@@ -224,7 +224,9 @@ With a `link:` install, host changes take effect after restart; **client-bundle 
 ## 11. Development
 
 ```sh
-cd D:/Coding/安全审查插件
+# Get the source (any path) and enter it:
+#   git clone https://github.com/ateen18/dsh-plugin-security-review && cd dsh-plugin-security-review
+cd <your-plugin-source-dir>
 npm test            # unit tests (analyzer + install-gate + watcher; zero deps)
 npm run check        # 全量语法校验（node --check 真实解析器）
 ```
@@ -268,7 +270,7 @@ test/               npm tests plus evil/benign fixtures
 
 ```sh
 # Publisher:
-cd D:/Coding/安全审查插件
+cd <your-plugin-source-dir>
 npm login && npm publish
 
 # Users:
