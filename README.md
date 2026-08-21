@@ -6,7 +6,11 @@ vulnerabilities, and supply-chain risks are analyzed, a review report is produce
 and an install recommendation is given. At runtime it keeps auditing the installed
 roster and disables dangerous plugins.
 
-See [README.zh.md](./README.zh.md) for the full Chinese documentation.
+See [README.zh.md](./README.zh.md) for the Chinese quick start.
+
+**Full user guides**:
+- English: [docs/USER_GUIDE.en.md](./docs/USER_GUIDE.en.md)
+- 中文（简体）: [docs/使用说明.md](./docs/使用说明.md)
 
 ## Three layers
 

@@ -1,5 +1,7 @@
 # dsh-plugin-security-review
 
+> 📖 完整使用说明：[docs/使用说明.md](./docs/使用说明.md) ｜ English user guide: [docs/USER_GUIDE.en.md](./docs/USER_GUIDE.en.md)
+
 面向 DeepSeek Harness（dsh）的**插件安全审查插件**：安装本插件后，再安装任何其他插件前，先对该插件的源代码做静态安全审查，识别危险代码、漏洞与供应链风险，输出安全审查报告并给出安装建议；运行期还会持续审计已安装插件，拦截并禁用危险插件。
 
 ## 工作原理（三层防线）
