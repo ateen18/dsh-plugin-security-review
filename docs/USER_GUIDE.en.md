@@ -74,6 +74,10 @@ dsh-safe-plugin list
 dsh-safe-plugin verify [package]
 ```
 
+![Terminal pre-install review (report)](images/terminal-review-1.png)
+
+![Terminal pre-install review (verdict & recommendation)](images/terminal-review-2.png)
+
 > Note: plain `dsh plugin add` does **not** go through pre-review by default (`installGate` is off to avoid rewriting global dsh files); see §7 if you want native installs reviewed too.
 
 ## 4. Web Settings Page: Plugin Security Review
@@ -96,6 +100,8 @@ Path: **Settings → sidebar “Plugin Security Review”**.
 - **Retry**: when a request fails, the error and a “Retry” button are shown (e.g. host API not registered yet).
 
 > Official built-in plugins are greyed out as “built-in”, exempt from review and uninstall.
+
+![Web settings: Plugin Security Review (with review/install tools panel)](images/web-review.png)
 
 ### 4.2 How the risk summary relates to the verdict (important)
 
