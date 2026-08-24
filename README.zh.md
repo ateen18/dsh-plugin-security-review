@@ -2,6 +2,8 @@
 
 [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 
+> **DSH 插件安全审查门**：安装前静态审查（危险代码、漏洞与供应链风险，含反混淆解码）、运行期持续审计与可选运行时守卫，以及设置页一键审查/安装/卸载的可视化面板。
+
 > 📖 完整使用说明：[docs/使用说明.md](./docs/使用说明.md) ｜ English user guide: [docs/USER_GUIDE.en.md](./docs/USER_GUIDE.en.md)
 
 面向 DeepSeek Harness（dsh）的**插件安全审查插件**：安装本插件后，再安装任何其他插件前，先对该插件的源代码做静态安全审查，识别危险代码、漏洞与供应链风险，输出安全审查报告并给出安装建议；运行期还会持续审计已安装插件，拦截并禁用危险插件。

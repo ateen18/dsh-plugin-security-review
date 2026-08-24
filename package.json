@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-security-review",
-  "description": "DSH plugin security review gate: pre-review plugin source before install, audit the running plugin roster at boot, and produce verdict reports with install recommendations",
+  "description": "Security review gate for DeepSeek Harness (dsh) plugins: static pre-install vetting of malicious code, vulnerabilities and supply-chain risks (with deobfuscation decoding), runtime audit, optional tool-call guard, and a one-click web review/install/uninstall panel.",
   "version": "0.1.0",
   "type": "module",
   "engines": {

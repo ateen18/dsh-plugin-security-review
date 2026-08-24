@@ -2,6 +2,8 @@
 
 [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 
+> **Security review gate for dsh plugins** — static pre-install vetting of malicious code, vulnerabilities and supply-chain risks (with deobfuscation decoding), runtime audit, optional tool-call guard, and a one-click web review/install/uninstall panel.
+
 A security review plugin for DeepSeek Harness (dsh) plugins. Once installed, every
 other plugin is statically reviewed before it is installed or loaded: dangerous code,
 vulnerabilities, and supply-chain risks are analyzed, a review report is produced,
