@@ -1,5 +1,7 @@
 # dsh-plugin-security-review
 
+[![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
+
 A security review plugin for DeepSeek Harness (dsh) plugins. Once installed, every
 other plugin is statically reviewed before it is installed or loaded: dangerous code,
 vulnerabilities, and supply-chain risks are analyzed, a review report is produced,
