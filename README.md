@@ -2,7 +2,9 @@
 
 [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
 
-> **Security review gate for dsh plugins** — static pre-install vetting of malicious code, vulnerabilities and supply-chain risks (with deobfuscation decoding), runtime audit, optional tool-call guard, and a one-click web review/install/uninstall panel.
+> **Security review gate for dsh plugins** — static pre-install vetting of malicious code, vulnerabilities and supply-chain risks (with deobfuscation decoding), runtime audit, optional tool-call guard, and a one-click review/install/uninstall panel.
+
+**Runs in both the web GUI and the dsh desktop client** (`desktop` profile, dsh 0.2.x runtime bundled in Electron's `app.asar`). Desktop differences — built-in plugin-manager installs, no `install-gate`, policy stored by the plugin itself — are documented in [the desktop adaptation notes](docs/2026-10-21-桌面客户端适配.md).
 
 A security review plugin for DeepSeek Harness (dsh) plugins. Once installed, every
 other plugin is statically reviewed before it is installed or loaded: dangerous code,
@@ -33,6 +35,23 @@ dsh-safe-plugin add dsh-plugin-security-review
 
 The package declares `dsh.bundle`, so the dsh plugin manager joins it into
 `dsh.profile.bundles` automatically.
+
+### dsh desktop client
+
+The desktop client ships its runtime inside `app.asar`, uses the `desktop`
+profile, and expects bundle operations to go through its built-in plugin
+manager. Install it with the bundled CLI (adjust the path to your install):
+
+```powershell
+& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" `
+    plugin --profile desktop add dsh-plugin-security-review
+```
+
+Then restart the client (or let HMR hot-load it). Desktop differences:
+install-gate is unavailable (the runtime is read-only), install/uninstall go
+through the built-in `pluginManager`, and the policy is edited in this
+plugin's own settings section. See
+[the desktop adaptation notes](docs/2026-10-21-桌面客户端适配.md).
 
 ## Review and install other plugins
 

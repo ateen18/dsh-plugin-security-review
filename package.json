@@ -1,16 +1,18 @@
 {
   "name": "dsh-plugin-security-review",
-  "description": "Security review gate for DeepSeek Harness (dsh) plugins: static pre-install vetting of malicious code, vulnerabilities and supply-chain risks (with deobfuscation decoding), runtime audit, optional tool-call guard, and a one-click web review/install/uninstall panel.",
-  "version": "0.1.0",
+  "description": "Security review gate for DeepSeek Harness (dsh) plugins: static pre-install vetting of malicious code, vulnerabilities and supply-chain risks (with deobfuscation decoding), runtime audit, optional tool-call guard, and a one-click review/install/uninstall panel that works in both the web GUI and the dsh desktop client.",
+  "version": "0.2.0",
   "type": "module",
   "engines": {
-    "node": "^22.19.0 || >=24.0.0"
+    "node": "^22.19.0 || >=24.0.0",
+    "dsh": ">=0.1.0-rc.6"
   },
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./analyzer": "./lib/analyzer/index.js",
     "./cli": "./lib/cli/index.js",
+    "./desktop": "./lib/desktop.js",
     "./package.json": "./package.json",
     "./client": "./lib/client.js"
   },
@@ -25,15 +27,16 @@
   ],
   "license": "MIT",
   "dsh": {
+    "manifestVersion": 1,
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
     "client": {
+      "platform": "web",
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
         "@deepseek-ai/dsh-client-ui-settings"
       ],
-      "platform": "web"
+      "external": []
     }
   },
   "keywords": [

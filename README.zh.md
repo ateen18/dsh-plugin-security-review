@@ -4,9 +4,18 @@
 
 > **DSH 插件安全审查门**：安装前静态审查（危险代码、漏洞与供应链风险，含反混淆解码）、运行期持续审计与可选运行时守卫，以及设置页一键审查/安装/卸载的可视化面板。
 
+> 🖥️ **已适配 dsh 桌面客户端**（Electron + 内置 0.2.x 运行时，`desktop` profile）：装进 `desktop` profile 即可在桌面设置里看到同一个「插件安全审查」分区；安装/卸载走客户端内建插件管理器，`install-gate` 在打包运行时不可用（只读）。差异详见 [桌面客户端适配记录](docs/2026-10-21-桌面客户端适配.md)。
+
 > 📖 完整使用说明：[docs/使用说明.md](./docs/使用说明.md) ｜ English user guide: [docs/USER_GUIDE.en.md](./docs/USER_GUIDE.en.md)
 
 面向 DeepSeek Harness（dsh）的**插件安全审查插件**：安装本插件后，再安装任何其他插件前，先对该插件的源代码做静态安全审查，识别危险代码、漏洞与供应链风险，输出安全审查报告并给出安装建议；运行期还会持续审计已安装插件，拦截并禁用危险插件。
+
+## 平台支持
+
+| 环境 | 运行时 | 状态 |
+| --- | --- | --- |
+| web 版 dsh | 0.1.x（npm 安装） | ✅ 原有行为不变 |
+| dsh 桌面客户端 | 0.2.x（打包在 `app.asar`） | ✅ 已适配（`desktop` profile） |
 
 ## 工作原理（三层防线）
 
@@ -28,6 +37,20 @@ dsh plugin --profile web add dsh-plugin-security-review
 ```
 
 安装后，`dsh.plugin` 会自动把本包加入 `dsh.profile.bundles` 层栈（本包声明了 `dsh.bundle`），无需手工改配置。
+
+### 桌面客户端（dsh desktop）
+
+桌面客户端把运行时打包进 `app.asar`，profile 固定叫 `desktop`，安装/卸载应交给内置插件管理器：
+
+```powershell
+# 用桌面自带 CLI（路径按实际安装位置调整）
+& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" `
+    plugin --profile desktop add dsh-plugin-security-review
+```
+
+也可以在桌面「设置 → 插件」里安装。安装后重启客户端（或等 HMR 热加载）。桌面端差异：
+install-gate 不可用（运行时只读）、安装/卸载走内置 `pluginManager`、策略在本插件自己的设置分区
+编辑。详见 [桌面客户端适配记录](docs/2026-10-21-桌面客户端适配.md)。
 
 
 ### 卸载

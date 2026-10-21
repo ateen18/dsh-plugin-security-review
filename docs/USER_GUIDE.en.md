@@ -2,7 +2,9 @@
 
 A security review plugin for DeepSeek Harness (dsh). Once installed, every other plugin is statically reviewed **before it is installed or loaded** (dangerous code, vulnerabilities, supply-chain risks), and installed plugins are continuously audited at runtime, with reports and install recommendations produced.
 
-**Version**: 0.1.0 (MIT)　**Repository**: https://github.com/ateen18/dsh-plugin-security-review
+**Supported environments**: the web dsh GUI (0.1.x runtime, npm install) and the **dsh desktop client** (Electron, 0.2.x runtime bundled in `app.asar`, `desktop` profile). See [the desktop adaptation notes](2026-10-21-桌面客户端适配.md) for what differs (built-in plugin-manager installs, no install-gate, plugin-owned policy storage).
+
+**Version**: 0.2.0 (MIT)　**Repository**: https://github.com/ateen18/dsh-plugin-security-review
 
 ---
 

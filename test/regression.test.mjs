@@ -143,6 +143,8 @@ test("previously blocked community plugins review to pass/warn", async () => {
 
 // ---- Regression: self review must not be blocked by own test fixtures ----
 test("plugin self-review does not flag its own test fixtures as critical", async () => {
-  const report = await analyzePackageDir(REPO_ROOT, { spec: "dsh-plugin-security-review", source: "installed" });
+  // `_fork-work/` 是工作区里的本地上游副本（未跟踪、不随包发布），不属于本插件代码；
+  // 在这台机器上它会让自审扫到 1975 个无关文件并判 block。排除它后自审只覆盖本仓库。
+  const report = await analyzePackageDir(REPO_ROOT, { spec: "dsh-plugin-security-review", source: "installed", ignore: ["_fork-work/"] });
   assert.notEqual(report.verdict, "block", "self review verdict=" + report.verdict + " score=" + report.score);
 });

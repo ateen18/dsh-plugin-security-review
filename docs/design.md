@@ -84,3 +84,27 @@ dsh 插件与普通 npm 包不同：它在**宿主进程**内以完整权限运�
 - 不拦截 dsh 自带插件（安装目录内），不拦截本插件自身；只审计 profile 侧的外部插件行。
 - 不自动删除/卸载任何插件：只禁用 + 报告，把最终处置权留给用户。
 - 传递依赖不逐文件扫描（成本），只做包名近似/可疑源检测。
+
+## 7. 桌面客户端（Electron）适配
+
+桌面客户端把整套运行时打包进 `app.asar`，用内置 0.2.1 运行时启动本机宿主，并固定使用
+`desktop` profile。对宿主半侧的影响与对策：
+
+1. **profile 位置**：优先读 `ctx.profileContext`（`dir` / `installAnchor` / `packageManager`），
+   拿不到再退回 `ctx.baseUrl`（0.1.x web）。见 `lib/desktop.js`。
+2. **包操作**：桌面端 PATH 上没有 `dsh`/`pnpm`。安装/卸载优先 `ctx.pluginManager`
+   （`installBundle` / `removeBundle`，带 profile 写锁、组合包选择、热应用与失败回滚），
+   其次 desktop CLI（`electron --expose-internals dsh-desktop-host/lib/cli.js`），
+   最后才用 `profileContext.packageManager` 调 pnpm。见 `lib/package-ops.js`。
+   注意 `pluginManager` 与插件同批启动，必须延迟取服务。
+3. **install-gate**：需要改写 `lib/bin.js`，打包运行时只读 → 显式报告
+   `supported:false, reason:"packaged-runtime"`，设置分区据此显示原因而不是静默失败。
+4. **设置**：0.2.1 删除了 `installSettingsSection`。策略改为插件自有持久化
+   （`$DSH_HOME/security-review/settings.json`），设置分区经 `/api/security-review/settings`
+   读写；0.1.x 上仍会额外挂宿主设置页。
+5. **web server 路由键**：0.2.x 以 `(kind, path)` 去重并抛错，同路径 GET/POST 必须合成一条
+   按方法分派的路由，且逐条注册以防单条失败拖垮其余路由。
+6. **模块解析**：官方包在 asar 内，profile 目录下可能还有旧版本副本；解析必须优先走
+   `ctx.loader.internal.resolveSync`，否则版本显示与「官方包免审」都会判错。
+
+细节与实测记录见 [2026-10-21-桌面客户端适配.md](2026-10-21-桌面客户端适配.md)。

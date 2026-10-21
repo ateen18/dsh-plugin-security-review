@@ -3,3 +3,7 @@ node_modules/
 .DS_Store
 tmp/
 .workbuddy/
+
+# 本地工作区数据，不属于插件包
+.dsh/
+_fork-work/

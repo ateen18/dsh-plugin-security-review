@@ -4,6 +4,7 @@
 #
 #   dsh-safe-plugin add dsh-plugin-security-review     (reviewed install)
 #   dsh plugin --profile web add dsh-plugin-security-review
+#   dsh.cmd plugin --profile desktop add dsh-plugin-security-review   (桌面客户端)
 #
 # The single row mounts the host half only (import gate, boot audit, agent
 # tools, settings section). The companion CLI `dsh-safe-plugin` performs the
