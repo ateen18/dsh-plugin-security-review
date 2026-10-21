@@ -118,23 +118,34 @@ dsh-safe-plugin verify
 
 ```
 lib/
-  index.js            宿主插件（settings 区、agent 工具、启动审计、事件）
+  index.js            宿主插件（审计、设置区、agent 工具、webServer API 注册、watcher）
+  api.js              HTTP API（list/run/review/install/uninstall/settings/capabilities/gate，loopback 防护）
+  client.js           浏览器端设置页模块（ModuleLoader bundle，策略面板 + 环境提示）
+  desktop.js          桌面客户端探测（Electron/asar/profileContext、install-gate 能力判定）
+  package-ops.js      profile 包操作（pluginManager → desktop CLI → pnpm）
   gate.js             运行期 import 门禁（EntryTree.prototype.import 补丁 + 作用域判定）
+  host.js             dsh 宿主包解析（含 @deepseek-ai/dsh-desktop-runtime 打包布局）
+  install-gate.js     原生 dsh plugin add 预审钩子（桌面端不可用）
+  watcher.js          profile package.json 变更监听（pnpm 直装兜底）
   store.js            报告/缓存持久化（$DSH_HOME/security-review）
   patch-manager.js    profile cordis.patch.yml 托管拦截块
-  settings.js         设置区 schema 与接线
+  settings.js         策略 schema、持久化与设置接线
   tools.js            security_review / security_review_status 工具
+  runtime-guard.js    运行时工具调用守卫
   cli/index.js        dsh-safe-plugin CLI（安装预审主入口）
   analyzer/           纯静态分析器（零依赖，CLI 与宿主共用）
-    rules.js          规则引擎（18 组规则）
+    rules.js          规则引擎（20 组规则）
     score.js          评分、结论与策略
     tar.js            tar.gz 解包（防路径穿越/zip bomb）
     registry.js       registry 元数据/版本选择/tarball 完整性校验
     semver.js         极简 semver
     known.js          知名包名清单（typosquat 比对）
     render.js         Markdown 报告渲染
+    decode.js         反混淆解码与词法剥离重扫
+docs/                 设计文档、使用说明、桌面端适配记录与修复/优化记录
 test/                 node --test 单元测试与恶意/良性夹具
 ```
+
 ## 从本地源码安装（开发/内网场景）
 
 ```sh
@@ -143,10 +154,9 @@ dsh plugin --profile web add link:<你的插件源码目录>
 
 # CLI 的三种调用方式（任选其一）：
 # 1) 全局安装（把 bin 放进 PATH，之后可直接用 dsh-safe-plugin）
-npm i -g <你的插件源码目录>
+npm i -g git+https://github.com/ateen18/dsh-plugin-security-review.git
 # 2) 用 profile 内生成的 bin（pnpm 会自动为带 bin 的依赖建 shim）
-& "$env:USERPROFILE.dshprofilesweb
-ode_modules.bindsh-safe-plugin.cmd" --help
+"$env:USERPROFILE\.dsh\profiles\web\node_modules\.bin\dsh-safe-plugin.cmd" --help
 # 3) 直接以 node 运行
 node "<你的插件源码目录>/lib/cli/index.js" review ./某个插件目录
 
@@ -157,3 +167,5 @@ npm test
 # 对本插件自身做一次自审（排除刻意构造的恶意测试夹具后应为 warn 而非 block）
 node lib/cli/index.js review . --ignore test/fixtures
 ```
+
+License: MIT
