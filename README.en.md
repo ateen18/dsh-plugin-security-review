@@ -50,7 +50,8 @@ executes it through the same built-in plugin manager as **Settings → Plugins**
 
 - The tool is enabled only in **Creator (Cordis) mode**; in Standard / PTC / Minimal
   the agent falls back to running `dsh plugin … add` (web) or the desktop
-  `dsh.cmd … add`, which has the same effect.
+  `dsh.cmd … add`, which has the same effect. The 0.1.x web runtime has no such
+  tool, so there the agent always uses the terminal.
 - The call requires **full access (danger-full-access)** or a per-call approval.
 - If the package has install/build scripts, the agent first shows you the package
   names awaiting approval (`pendingBuilds`) and retries with `approvedBuilds`

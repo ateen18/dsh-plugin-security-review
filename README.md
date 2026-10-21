@@ -48,7 +48,7 @@ dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 
 agent 走 dsh 的 `plugin_manager` 工具（`install_bundle`；桌面端由同一个内建插件管理器执行，等价于「设置 → 插件」里的安装）：
 
-- 该工具默认只在 **Creator（Cordis）模式** 启用；Standard / PTC / 极简模式下 agent 会改用终端执行 `dsh plugin … add`（web）或桌面 `dsh.cmd … add`，效果相同。
+- 该工具默认只在 **Creator（Cordis）模式** 启用；Standard / PTC / 极简模式下 agent 会改用终端执行 `dsh plugin … add`（web）或桌面 `dsh.cmd … add`，效果相同。0.1.x 的 web 版没有这个工具，一律走终端。
 - 调用要求会话是**完全权限（danger-full-access）**，或对这一次调用单独批准。
 - 如果包带有安装/构建脚本，agent 会先把待批准的包名列给你（`pendingBuilds`），你同意后它才会带 `approvedBuilds` 重试。
 - 装完通常要重启 dsh（或等 HMR 热加载）才完全生效。
