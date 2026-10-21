@@ -31,18 +31,13 @@ See [README.md](./README.md) for the Chinese quick start (the repository's defau
 ## Install
 
 ```sh
-# From GitHub (the npm name is owned by an unrelated package — do not install the bare name)
+# From GitHub (recommended; the repo is cloned automatically)
 dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 # or: dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 ```
 
 The package declares `dsh.bundle`, so the dsh plugin manager joins it into
 `dsh.profile.bundles` automatically.
-
-> **npm naming note** — `dsh-plugin-security-review` on the public registry
-> belongs to a different repository (`ShanHaiFish/dsh-plugin-security-review`),
-> so `dsh plugin add dsh-plugin-security-review` installs someone else's
-> package. Install this project from GitHub or from a local checkout.
 
 ### dsh desktop client
 

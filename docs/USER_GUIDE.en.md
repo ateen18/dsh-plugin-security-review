@@ -2,7 +2,7 @@
 
 A security review plugin for DeepSeek Harness (dsh). Once installed, every other plugin is statically reviewed **before it is installed or loaded** (dangerous code, vulnerabilities, supply-chain risks), and installed plugins are continuously audited at runtime, with reports and install recommendations produced.
 
-**Supported environments**: the web dsh GUI (0.1.x runtime, npm install) and the **dsh desktop client** (Electron, 0.2.x runtime bundled in `app.asar`, `desktop` profile). See [the desktop adaptation notes](2026-10-21-桌面客户端适配.md) for what differs (built-in plugin-manager installs, no install-gate, plugin-owned policy storage).
+**Supported environments**: the web dsh GUI (0.1.x runtime) and the **dsh desktop client** (Electron, 0.2.x runtime bundled in `app.asar`, `desktop` profile). See [the desktop adaptation notes](2026-10-21-桌面客户端适配.md) for what differs (built-in plugin-manager installs, no install-gate, plugin-owned policy storage).
 
 **Version**: 0.2.0 (MIT)　**Repository**: https://github.com/ateen18/dsh-plugin-security-review
 
@@ -22,7 +22,7 @@ A security review plugin for DeepSeek Harness (dsh). Once installed, every other
 ### 2.1 Install this plugin
 
 ```sh
-# Option 1: GitHub (recommended; no npm publish needed, the repo is cloned automatically)
+# Option 1: GitHub (recommended; the repo is cloned automatically)
 dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 
 # Option 2: local development (link: — changes take effect immediately)
@@ -31,11 +31,6 @@ dsh plugin --profile web add link:<your-plugin-source-dir>
 # Option 3: safe installer (self-review first; requires the CLI, see 2.2)
 dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 ```
-
-> **Do not install the bare name**: `dsh-plugin-security-review` on the public
-> registry belongs to another repository (`ShanHaiFish/dsh-plugin-security-review`),
-> so `dsh plugin add dsh-plugin-security-review` installs someone else's package.
-> This repository is distributed via GitHub or a local checkout only.
 
 **Desktop client**: install into the `desktop` profile (not `web`):
 
@@ -49,18 +44,15 @@ dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 Restart the client afterwards (or let HMR hot-load it). See
 [the desktop adaptation notes](2026-10-21-桌面客户端适配.md).
 
-> **Dependencies**: the `@deepseek-ai/*` packages (cordis-plugin-loader / dsh-settings / dsh-tools / schemastery) are **optionalDependencies** — if the registry cannot resolve them the install still succeeds; at runtime the host's own copies are resolved from the dsh installation directory (single module instance), and profile-local copies are only a fallback. On the desktop client the host copies live in `app.asar/dsh/node_modules`.
+> **Dependencies**: the `@deepseek-ai/*` packages (cordis-plugin-loader / dsh-settings / dsh-tools / schemastery) are **optionalDependencies** — if they cannot be resolved the install still succeeds; at runtime the host's own copies are resolved from the dsh installation directory (single module instance), and profile-local copies are only a fallback. On the desktop client the host copies live in `app.asar/dsh/node_modules`.
 
 ### 2.2 Making the CLI available
 
 ```sh
-# ① Global install from GitHub (bin lands on PATH)
-npm i -g github:ateen18/dsh-plugin-security-review
-
-# ② Use the bin shim pnpm created inside the profile
+# ① Use the bin shim pnpm created inside the profile
 & "$env:USERPROFILE\.dsh\profiles\web\node_modules\.bin\dsh-safe-plugin.cmd" --help
 
-# ③ Run with node directly
+# ② Run with node directly
 node "<your-plugin-source-dir>/lib/cli/index.js" --help
 ```
 
@@ -281,7 +273,7 @@ lib/
     ├── known.js      known-package-name list (typosquat comparison)
     └── render.js     Markdown report rendering
 docs/                design docs, user guide and fix/optimization records
-test/               npm tests plus evil/benign fixtures
+test/               node --test suites plus evil/benign fixtures
 ```
 
 ### Related documents
@@ -292,16 +284,13 @@ test/               npm tests plus evil/benign fixtures
 - `docs/2026-08-20-web-ui-优化记录.md` — Web UI module development and issue log
 - `docs/2026-08-20-跨机安装崩溃排查与加固报告.md` — cross-machine install investigation and hardening
 
-## 12. Publishing and Installing for Others
+## 12. Distribution and Installing for Others
+
+Distribute the repository itself (GitHub or a local checkout) — `dsh.plugin`
+installs it straight from the source:
 
 ```sh
-# Publisher (the bare npm name is taken by another project — publish under a
-# scope, e.g. @ateen18/dsh-plugin-security-review, or distribute via GitHub only):
-cd <your-plugin-source-dir>
-npm login && npm publish --access public
-
-# Users (GitHub distribution; this is what this repo supports today):
-npm i -g github:ateen18/dsh-plugin-security-review
+# Users (GitHub; the repo is cloned automatically)
 dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 ```

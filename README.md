@@ -16,7 +16,7 @@
 
 | 环境 | 运行时 | 状态 |
 | --- | --- | --- |
-| web 版 dsh | 0.1.x（npm 安装） | ✅ 原有行为不变 |
+| web 版 dsh | 0.1.x 运行时 | ✅ 原有行为不变 |
 | dsh 桌面客户端 | 0.2.x（打包在 `app.asar`） | ✅ 已适配（`desktop` profile） |
 
 ## 工作原理（三层防线）
@@ -39,8 +39,6 @@ dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 ```
 
 安装后，`dsh.plugin` 会自动把本包加入 `dsh.profile.bundles` 层栈（本包声明了 `dsh.bundle`），无需手工改配置。
-
-> **npm 包名注意**：公开 registry 上的 `dsh-plugin-security-review` 属于另一个仓库（`ShanHaiFish/dsh-plugin-security-review`），所以裸名安装会装到别人的包。本仓库请用 GitHub 地址或本地目录安装。
 
 ### 桌面客户端（dsh desktop）
 
@@ -149,15 +147,13 @@ test/                 node --test 单元测试与恶意/良性夹具
 ## 从本地源码安装（开发/内网场景）
 
 ```sh
-# 先把本仓库链接进 profile（link: 不需要发布到 registry）
+# 先把本仓库链接进 profile（link: 方式，改动即时生效）
 dsh plugin --profile web add link:<你的插件源码目录>
 
-# CLI 的三种调用方式（任选其一）：
-# 1) 全局安装（把 bin 放进 PATH，之后可直接用 dsh-safe-plugin）
-npm i -g git+https://github.com/ateen18/dsh-plugin-security-review.git
-# 2) 用 profile 内生成的 bin（pnpm 会自动为带 bin 的依赖建 shim）
+# CLI 的两种调用方式（任选其一）：
+# 1) 用 profile 内生成的 bin（pnpm 会自动为带 bin 的依赖建 shim）
 "$env:USERPROFILE\.dsh\profiles\web\node_modules\.bin\dsh-safe-plugin.cmd" --help
-# 3) 直接以 node 运行
+# 2) 直接以 node 运行
 node "<你的插件源码目录>/lib/cli/index.js" review ./某个插件目录
 
 # 运行单元测试（不需要 dsh 环境，零依赖；注意不要在 test 后加反斜杠）
