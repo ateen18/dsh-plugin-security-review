@@ -30,13 +30,15 @@
 
 ```sh
 # 方式一：经本插件自带的安全安装器（推荐）
-dsh-safe-plugin add dsh-plugin-security-review
+dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 
 # 方式二：官方安装命令（安装后同样立即生效）
-dsh plugin --profile web add dsh-plugin-security-review
+dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 ```
 
 安装后，`dsh.plugin` 会自动把本包加入 `dsh.profile.bundles` 层栈（本包声明了 `dsh.bundle`），无需手工改配置。
+
+> **npm 包名注意**：公开 registry 上的 `dsh-plugin-security-review` 属于另一个仓库（`ShanHaiFish/dsh-plugin-security-review`），所以裸名安装会装到别人的包。本仓库请用 GitHub 地址或本地目录安装。
 
 ### 桌面客户端（dsh desktop）
 
@@ -45,7 +47,7 @@ dsh plugin --profile web add dsh-plugin-security-review
 ```powershell
 # 用桌面自带 CLI（路径按实际安装位置调整）
 & "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" `
-    plugin --profile desktop add dsh-plugin-security-review
+    plugin --profile desktop add github:ateen18/dsh-plugin-security-review
 ```
 
 也可以在桌面「设置 → 插件」里安装。安装后重启客户端（或等 HMR 热加载）。桌面端差异：

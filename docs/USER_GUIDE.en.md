@@ -22,26 +22,40 @@ A security review plugin for DeepSeek Harness (dsh). Once installed, every other
 ### 2.1 Install this plugin
 
 ```sh
-# Option 1: npm registry
-dsh plugin --profile web add dsh-plugin-security-review
-
-# Option 2: GitHub (no npm publish needed; the repo is cloned automatically)
+# Option 1: GitHub (recommended; no npm publish needed, the repo is cloned automatically)
 dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 
-# Option 3: local development (link: — changes take effect immediately)
+# Option 2: local development (link: — changes take effect immediately)
 dsh plugin --profile web add link:<your-plugin-source-dir>
 
-# Option 4: safe installer (self-review first; requires the CLI, see 2.2)
-dsh-safe-plugin add dsh-plugin-security-review
+# Option 3: safe installer (self-review first; requires the CLI, see 2.2)
+dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 ```
 
-> **Dependencies**: the `@deepseek-ai/*` packages (cordis-plugin-loader / dsh-settings / dsh-tools / schemastery) are **optionalDependencies** — if the registry cannot resolve them the install still succeeds; at runtime the host's own copies are resolved from the dsh installation directory (single module instance), and profile-local copies are only a fallback.
+> **Do not install the bare name**: `dsh-plugin-security-review` on the public
+> registry belongs to another repository (`ShanHaiFish/dsh-plugin-security-review`),
+> so `dsh plugin add dsh-plugin-security-review` installs someone else's package.
+> This repository is distributed via GitHub or a local checkout only.
+
+**Desktop client**: install into the `desktop` profile (not `web`):
+
+```powershell
+# Either install github:ateen18/dsh-plugin-security-review from
+# Settings → Plugins, or use the bundled CLI:
+& "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" `
+    plugin --profile desktop add github:ateen18/dsh-plugin-security-review
+```
+
+Restart the client afterwards (or let HMR hot-load it). See
+[the desktop adaptation notes](2026-10-21-桌面客户端适配.md).
+
+> **Dependencies**: the `@deepseek-ai/*` packages (cordis-plugin-loader / dsh-settings / dsh-tools / schemastery) are **optionalDependencies** — if the registry cannot resolve them the install still succeeds; at runtime the host's own copies are resolved from the dsh installation directory (single module instance), and profile-local copies are only a fallback. On the desktop client the host copies live in `app.asar/dsh/node_modules`.
 
 ### 2.2 Making the CLI available
 
 ```sh
-# ① Global install (bin lands on PATH)
-npm i -g dsh-plugin-security-review
+# ① Global install from GitHub (bin lands on PATH)
+npm i -g github:ateen18/dsh-plugin-security-review
 
 # ② Use the bin shim pnpm created inside the profile
 & "$env:USERPROFILE\.dsh\profiles\web\node_modules\.bin\dsh-safe-plugin.cmd" --help
@@ -49,6 +63,10 @@ npm i -g dsh-plugin-security-review
 # ③ Run with node directly
 node "<your-plugin-source-dir>/lib/cli/index.js" --help
 ```
+
+> The desktop runtime lives inside `app.asar`, so a plain `node` cannot execute its
+> `lib/bin.js`. On the desktop client prefer the "safe install" button in the
+> settings section, or the `dsh.cmd` wrapper shown above.
 
 ### 2.3 Uninstall this plugin
 
@@ -277,14 +295,15 @@ test/               npm tests plus evil/benign fixtures
 ## 12. Publishing and Installing for Others
 
 ```sh
-# Publisher:
+# Publisher (the bare npm name is taken by another project — publish under a
+# scope, e.g. @ateen18/dsh-plugin-security-review, or distribute via GitHub only):
 cd <your-plugin-source-dir>
-npm login && npm publish
+npm login && npm publish --access public
 
-# Users:
-npm i -g dsh-plugin-security-review
-dsh plugin --profile web add dsh-plugin-security-review
-dsh-safe-plugin add dsh-plugin-security-review
+# Users (GitHub distribution; this is what this repo supports today):
+npm i -g github:ateen18/dsh-plugin-security-review
+dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
+dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 ```
 
 GitHub: `https://github.com/ateen18/dsh-plugin-security-review` (MIT).

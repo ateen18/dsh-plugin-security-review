@@ -29,12 +29,18 @@ See [README.zh.md](./README.zh.md) for the Chinese quick start.
 ## Install
 
 ```sh
-dsh-safe-plugin add dsh-plugin-security-review
-# or: dsh plugin --profile web add dsh-plugin-security-review
+# From GitHub (the npm name is owned by an unrelated package — do not install the bare name)
+dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
+# or: dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 ```
 
 The package declares `dsh.bundle`, so the dsh plugin manager joins it into
 `dsh.profile.bundles` automatically.
+
+> **npm naming note** — `dsh-plugin-security-review` on the public registry
+> belongs to a different repository (`ShanHaiFish/dsh-plugin-security-review`),
+> so `dsh plugin add dsh-plugin-security-review` installs someone else's
+> package. Install this project from GitHub or from a local checkout.
 
 ### dsh desktop client
 
@@ -44,7 +50,7 @@ manager. Install it with the bundled CLI (adjust the path to your install):
 
 ```powershell
 & "$env:LOCALAPPDATA\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd" `
-    plugin --profile desktop add dsh-plugin-security-review
+    plugin --profile desktop add github:ateen18/dsh-plugin-security-review
 ```
 
 Then restart the client (or let HMR hot-load it). Desktop differences:
