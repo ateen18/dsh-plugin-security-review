@@ -268,7 +268,7 @@ With a `link:` install, host changes take effect after restart; **client-bundle 
 # Get the source (any path) and enter it:
 #   git clone https://github.com/ateen18/dsh-plugin-security-review && cd dsh-plugin-security-review
 cd <your-plugin-source-dir>
-npm test            # unit tests (analyzer + install-gate + watcher; zero deps)
+npm test            # unit tests (analyzer, install-gate, watcher, activation; zero deps)
 npm run check        # 全量语法校验（node --check 真实解析器）
 ```
 
