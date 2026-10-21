@@ -39,6 +39,28 @@ dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 The package declares `dsh.bundle`, so the dsh plugin manager joins it into
 `dsh.profile.bundles` automatically.
 
+### Install through an agent
+
+You can also ask an agent inside a session instead of running the command yourself:
+
+> Install `github:ateen18/dsh-plugin-security-review` into the current profile (on the desktop client: the `desktop` profile).
+
+The agent uses dsh's `plugin_manager` tool (`install_bundle`; the desktop client
+executes it through the same built-in plugin manager as **Settings → Plugins**):
+
+- The tool is enabled only in **Creator (Cordis) mode**; in Standard / PTC / Minimal
+  the agent falls back to running `dsh plugin … add` (web) or the desktop
+  `dsh.cmd … add`, which has the same effect.
+- The call requires **full access (danger-full-access)** or a per-call approval.
+- If the package has install/build scripts, the agent first shows you the package
+  names awaiting approval (`pendingBuilds`) and retries with `approvedBuilds`
+  only after you agree.
+- Restart dsh (or wait for HMR) for the plugin to take full effect.
+
+> Letting an agent install a plugin means letting it download and run third-party
+> code. Review it first with `dsh-safe-plugin review <target>`, or use the
+> "Review / safe install" panel of this plugin once it is installed.
+
 ### dsh desktop client
 
 The desktop client ships its runtime inside `app.asar`, uses the `desktop`

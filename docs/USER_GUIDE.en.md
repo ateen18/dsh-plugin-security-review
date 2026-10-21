@@ -44,6 +44,28 @@ dsh-safe-plugin add github:ateen18/dsh-plugin-security-review
 Restart the client afterwards (or let HMR hot-load it). See
 [the desktop adaptation notes](2026-10-21-桌面客户端适配.md).
 
+### 2.1.1 Install through an agent (in a session)
+
+You can ask an agent instead of running commands yourself, for example:
+
+> Install `github:ateen18/dsh-plugin-security-review` into the current profile (on the desktop client: the `desktop` profile).
+
+The agent uses dsh's `plugin_manager` tool (`install_bundle`; on the desktop client
+the same built-in plugin manager executes it):
+
+- The tool is enabled only in **Creator (Cordis) mode**; in Standard / PTC / Minimal
+  the agent falls back to running `dsh plugin … add` (web) or the desktop
+  `dsh.cmd … add`, which has the same effect.
+- The call requires **full access (danger-full-access)** or a per-call approval.
+- If the package has install/build scripts, the agent first lists the package names
+  awaiting approval (`pendingBuilds`) and retries with `approvedBuilds` only after
+  you agree; unapproved scripts do not run.
+- Restart dsh (or wait for HMR) for the plugin to take full effect.
+
+> Letting an agent install a plugin means letting it download and run third-party
+> code: review it first with `dsh-safe-plugin review <target>`, or use the
+> "Review / safe install" panel once this plugin is installed.
+
 > **Dependencies**: the `@deepseek-ai/*` packages (cordis-plugin-loader / dsh-settings / dsh-tools / schemastery) are **optionalDependencies** — if they cannot be resolved the install still succeeds; at runtime the host's own copies are resolved from the dsh installation directory (single module instance), and profile-local copies are only a fallback. On the desktop client the host copies live in `app.asar/dsh/node_modules`.
 
 ### 2.2 Making the CLI available

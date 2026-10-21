@@ -40,6 +40,21 @@ dsh plugin --profile web add github:ateen18/dsh-plugin-security-review
 
 安装后，`dsh.plugin` 会自动把本包加入 `dsh.profile.bundles` 层栈（本包声明了 `dsh.bundle`），无需手工改配置。
 
+### 让 agent 安装（会话内）
+
+不自己敲命令也行，直接在会话里让 agent 装：
+
+> 帮我把 `github:ateen18/dsh-plugin-security-review` 装进当前 profile（桌面端装进 `desktop`）。
+
+agent 走 dsh 的 `plugin_manager` 工具（`install_bundle`；桌面端由同一个内建插件管理器执行，等价于「设置 → 插件」里的安装）：
+
+- 该工具默认只在 **Creator（Cordis）模式** 启用；Standard / PTC / 极简模式下 agent 会改用终端执行 `dsh plugin … add`（web）或桌面 `dsh.cmd … add`，效果相同。
+- 调用要求会话是**完全权限（danger-full-access）**，或对这一次调用单独批准。
+- 如果包带有安装/构建脚本，agent 会先把待批准的包名列给你（`pendingBuilds`），你同意后它才会带 `approvedBuilds` 重试。
+- 装完通常要重启 dsh（或等 HMR 热加载）才完全生效。
+
+> 让 agent 装插件等于让它下载并运行第三方代码；装之前建议先跑一遍审查：`dsh-safe-plugin review <目标>`，或装好本插件后用设置页里的「审查 / 安全安装」。
+
 ### 桌面客户端（dsh desktop）
 
 桌面客户端把运行时打包进 `app.asar`，profile 固定叫 `desktop`，安装/卸载应交给内置插件管理器：
